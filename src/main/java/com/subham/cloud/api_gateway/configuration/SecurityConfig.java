@@ -10,12 +10,26 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+  private final String[] freeEndpoints = {
+          "/v3/api-docs/**",
+          "/swagger-ui/**",
+          "/swagger-ui.html",
+          "/actuator/**",
+          "/aggregate/**",
+          "/api-docs/**"
+  };
+
   @Bean
   public SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception{
     return httpSecurity.csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
-            .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(freeEndpoints)
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+            .oauth2ResourceServer(oauth -> oauth
+                    .jwt(Customizer.withDefaults()))
             .build();
   }
 }
