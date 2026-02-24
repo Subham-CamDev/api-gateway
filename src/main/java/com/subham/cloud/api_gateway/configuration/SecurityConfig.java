@@ -6,6 +6,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 public class SecurityConfig {
@@ -23,6 +24,8 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception{
     return httpSecurity.csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(
+                    request -> new CorsConfiguration().applyPermitDefaultValues()))
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(freeEndpoints)
                     .permitAll()
