@@ -10,6 +10,7 @@ spring:
 server:
   port: 9000
 
+# Spring doc configuration for Swagger UI
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -20,3 +21,62 @@ springdoc:
         url: /aggregate/order-service/v3/api-docs
       - name: Inventory Service
         url: /aggregate/inventory-service/v3/api-docs
+
+#Spring Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers,env,circuitbreakers,circuitbreakerevents
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+#Resilience4j configuration for circuit breaker
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        registerHealthIndicator: true
+
+    instances:
+      productServiceCB:
+        baseConfig: default
+        registerHealthIndicator: true
+      orderServiceCB:
+        baseConfig: default
+        registerHealthIndicator: true
+      inventoryServiceCB:
+        baseConfig: default
+        registerHealthIndicator: true
+
+#Resilience4j timer configuration for monitoring
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 3s
+        cancelRunningFuture: true
+
+#Retry configuration for retrying failed calls
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 2s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
