@@ -23,7 +23,7 @@ public class Routes {
     return GatewayRouterFunctions.route("product_service")
             .route(RequestPredicates.path("/api/product/**"),
                     HandlerFunctions.http())
-            .before(uri("http://localhost:8080"))
+            .before(uri("lb://PRODUCT-SERVICE"))
             .filter(CircuitBreakerFilterFunctions.circuitBreaker("productServiceCB",
                     URI.create("forward:/fallbackRoute")))
             .build();
@@ -34,7 +34,7 @@ public class Routes {
     return GatewayRouterFunctions.route("product_service_swagger")
             .route(RequestPredicates.path("/aggregate/product-service/**"),
                     HandlerFunctions.http())
-            .before(uri("http://localhost:8080"))
+            .before(uri("lb://PRODUCT-SERVICE"))
             .before(rewritePath(
                     "/aggregate/product-service/(?<segment>.*)",
                     "/${segment}"
@@ -49,7 +49,7 @@ public class Routes {
     return GatewayRouterFunctions.route("order_service")
             .route(RequestPredicates.path("/api/order/**"),
                     HandlerFunctions.http())
-            .before(uri("http://localhost:8081"))
+            .before(uri("lb://ORDER-SERVICE"))
             .filter(CircuitBreakerFilterFunctions.circuitBreaker("orderServiceCB",
                     URI.create("forward:/fallbackRoute")))
             .build();
@@ -60,7 +60,7 @@ public class Routes {
     return GatewayRouterFunctions.route("order_service_swagger")
             .route(RequestPredicates.path("/aggregate/order-service/**"),
                     HandlerFunctions.http())
-            .before(uri("http://localhost:8081"))
+            .before(uri("lb://ORDER-SERVICE"))
             .before(rewritePath(
                     "/aggregate/order-service/(?<segment>.*)",
                     "/${segment}"
@@ -75,7 +75,7 @@ public class Routes {
     return GatewayRouterFunctions.route("inventory_service")
             .route(RequestPredicates.path("/api/inventory/**"),
                     HandlerFunctions.http())
-            .before(uri("http://localhost:8082"))
+            .before(uri("lb://INVENTORY-SERVICE"))
             .filter(CircuitBreakerFilterFunctions.circuitBreaker("inventoryServiceCB",
                     URI.create("forward:/fallbackRoute")))
             .build();
@@ -86,7 +86,7 @@ public class Routes {
     return GatewayRouterFunctions.route("inventory_service_swagger")
             .route(RequestPredicates.path("/aggregate/inventory-service/**"),
                     HandlerFunctions.http())
-            .before(uri("http://localhost:8082"))
+            .before(uri("lb://INVENTORY-SERVICE"))
             .before(rewritePath(
                     "/aggregate/inventory-service/(?<segment>.*)",
                     "/${segment}"
