@@ -58,6 +58,11 @@
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>9.0</version>
 		</dependency>
+		<dependency>
+			<groupId>io.zipkin.brave</groupId>
+			<artifactId>brave-context-slf4j</artifactId>
+			<version>6.3.0</version>
+		</dependency>
 
 		<!--Dependency for Eureka Client, Load Balancer, Actuator, Prometheus and CircuitBreaker  -->
 		<dependency>
