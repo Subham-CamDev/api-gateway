@@ -49,19 +49,21 @@
 
         <!--	Dependencies for tracing and logging	-->
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-zipkin</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-tracing-bridge-brave</artifactId>
-			<version>1.7.0-M3</version>
 		</dependency>
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>9.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.zipkin.brave</groupId>
-			<artifactId>brave-context-slf4j</artifactId>
-			<version>6.3.0</version>
 		</dependency>
 
 		<!--Dependency for Eureka Client, Load Balancer, Actuator, Prometheus and CircuitBreaker  -->
@@ -117,6 +119,18 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>subham2212/api-gateway</name>
+						<publish>true</publish>
+					</image>
+					<docker>
+						<publishRegistry>
+							<username>subham2212</username>
+							<password>${dockerPassword}</password>
+						</publishRegistry>
+					</docker>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
